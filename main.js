@@ -16,9 +16,33 @@ if (menu && nav) {
 }
 
 const currentPage = location.pathname.split('/').pop() || 'index.html';
+const pageSlug = currentPage.replace('.html', '').replace('index', 'home');
+document.body.classList.add(`page-${pageSlug}`);
 document.querySelectorAll('.site-nav a').forEach((link) => {
   if (link.getAttribute('href') === currentPage) link.classList.add('active');
 });
+
+if (!document.body.classList.contains('home-page')) {
+  document.body.classList.add('inner-page');
+  const header = document.querySelector('.site-header');
+  const headerInner = header?.querySelector('.header-inner');
+  const legacyPhone = header?.querySelector('.header-phone');
+  header?.classList.add('glass-header');
+  legacyPhone?.classList.add('legacy-phone');
+
+  if (headerInner && menu) {
+    const tools = document.createElement('div');
+    tools.className = 'header-tools';
+    tools.innerHTML = '<span class="store-status" data-opening-status><i></i><span>Kontrollerar öppettid</span></span><a class="header-phone modern-phone" href="tel:+46240410210">0240-410 210</a><a class="header-cta" href="index.html#snabbforfragan">Snabbförfrågan</a>';
+    headerInner.insertBefore(tools, menu);
+  }
+
+  const dock = document.createElement('div');
+  dock.className = 'mobile-dock';
+  dock.setAttribute('aria-label', 'Snabbval');
+  dock.innerHTML = '<a href="tel:+46240410210">Ring Bergfelds</a><a target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=Gatubacken+9+771+42+Ludvika">Hitta hit</a>';
+  document.body.append(dock);
+}
 
 document.querySelectorAll('[data-year]').forEach((element) => {
   element.textContent = new Date().getFullYear();
